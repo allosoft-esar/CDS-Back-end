@@ -5,6 +5,7 @@ const cdsController = require('./../controllers/cdsController')
 // GET //
 router.get('/newId', cdsController.getNewId)
 router.get('/', cdsController.get)
+router.get('/getById/:id', cdsController.getById)
 
 // POST //
 router.post('/', cdsController.insert)

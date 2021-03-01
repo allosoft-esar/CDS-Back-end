@@ -27,6 +27,16 @@ module.exports = {
             next(error)
         }
     },
+    getById: async (req, res, next) => {
+        try {
+            const data = await cdsModel.findOne({
+                _id: new ObjectId(req.params.id),
+            })
+            res.send(data)
+        } catch (error) {
+            next(error)
+        }
+    },
     getNewId: async (req, res, next) => {
         try {
             const data = new ObjectId();
