@@ -4,15 +4,18 @@ const ObjectId = require("mongoose").Types.ObjectId;
 module.exports = {
     get: async (req, res, next) => {
         try {
-            let data = null,
-                condition = {
-                    _id: new ObjectId(req.params.id),
-                };
+            let data = {};
+            let select = "name method revision";
             if (req.params.id) {
                 if (req.query.revision) {
-                    condition["revision.label"] = req.query.revision
+                    data = await cdsModel.findOne({
+                        _id: new ObjectId(req.params.id),
+                    }, select).select({ revision: { $elemMatch: { label: req.query.revision } } })
+                } else {
+                    data = await cdsModel.findOne({
+                        _id: new ObjectId(req.params.id),
+                    }, select)
                 }
-                data = await cdsModel.findOne(condition)
                 if (data.method != req.method) {
                     throw false
                 }
