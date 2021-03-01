@@ -54,4 +54,25 @@ module.exports = {
             next(error)
         }
     },
+    update: async (req, res, next) => {
+        try {
+            const body = req.body
+            const data = await cdsModel.findOneAndUpdate({
+                _id: new ObjectId(req.params.id)
+            }, body, { new: true })
+            res.send(data)
+        } catch (error) {
+            next(error)
+        }
+    },
+    delete: async (req, res, next) => {
+        try {
+            const data = await cdsModel.findOneAndRemove({
+                _id: new ObjectId(req.params.id)
+            })
+            res.send(data)
+        } catch (error) {
+            next(error)
+        }
+    }
 }

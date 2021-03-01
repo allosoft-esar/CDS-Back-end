@@ -10,6 +10,13 @@ router.get('/', cdsController.get)
 router.post('/', cdsController.insert)
 router.post('/search', cdsController.search)
 
+// PUT //
+router.put('/update/:id', cdsController.update)
+
+// DELETE //
+router.delete('/delete/:id', cdsController.delete)
+
+
 // ALL //
 router.all('/:id', cdsController.get)
 
