@@ -5,15 +5,36 @@ module.exports = {
     get: async (req, res, next) => {
         try {
             let data = {};
-            let select = "name method revision";
+            let select = "name method revision description";
             if (req.params.id) {
+                const id = new ObjectId(req.params.id);
+
                 if (req.query.revision) {
-                    data = await cdsModel.findOne({
-                        _id: new ObjectId(req.params.id),
-                    }, select).select({ revision: { $elemMatch: { label: req.query.revision } } })
+                    data = await cdsModel.aggregate([
+                        {
+                            $match: {
+                                _id: id,
+                            }
+                        },
+                        { $unwind: "$revision" },
+                        {
+                            $match: {
+                                "revision.label": req.query.revision,
+                            }
+                        },
+                        {
+                            "$project": {
+                                "name": 1,
+                                "description": 1,
+                                "revision": 1,
+                                "method": 1
+                            }
+                        },
+                    ])
+                    data = await data[0]
                 } else {
                     data = await cdsModel.findOne({
-                        _id: new ObjectId(req.params.id),
+                        _id: id,
                     }, select)
                 }
                 if (data.method != req.method) {
