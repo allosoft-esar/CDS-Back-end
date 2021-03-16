@@ -48,7 +48,11 @@ module.exports = {
             } else {
                 data = await cdsModel.find({});
             }
-            res.send(data)
+            if (data) {
+                res.send(data)
+            } else {
+                throw false;
+            }
         } catch (error) {
             next(error)
         }
