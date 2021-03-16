@@ -23,10 +23,17 @@ module.exports = {
                             }
                         },
                         {
+                            $addFields: {
+                                value: "$revision.value",
+                                dataSet: "$revision.dataSet"
+                            }
+                        },
+                        {
                             "$project": {
                                 "name": 1,
                                 "description": 1,
-                                "revision": 1,
+                                "value": 1,
+                                "dataSet": 1,
                                 "method": 1
                             }
                         },
