@@ -5,7 +5,7 @@ module.exports = {
     get: async (req, res, next) => {
         try {
             let data = {};
-            let select = "name method revision description";
+            let select = "name revision description";
             if (req.params.id) {
                 const id = new ObjectId(req.params.id);
 
@@ -14,6 +14,7 @@ module.exports = {
                         {
                             $match: {
                                 _id: id,
+                                method: req.method
                             }
                         },
                         { $unwind: "$revision" },
@@ -33,8 +34,7 @@ module.exports = {
                                 "name": 1,
                                 "description": 1,
                                 "value": 1,
-                                "dataSet": 1,
-                                "method": 1
+                                "dataSet": 1
                             }
                         },
                     ])
@@ -42,10 +42,8 @@ module.exports = {
                 } else {
                     data = await cdsModel.findOne({
                         _id: id,
+                        method: req.method
                     }, select)
-                }
-                if (data.method != req.method) {
-                    throw false
                 }
             } else {
                 data = await cdsModel.find({});
